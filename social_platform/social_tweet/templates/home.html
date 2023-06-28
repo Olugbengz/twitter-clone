@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+ {% block content %}
+
+<div class="container">
+     <div class="row">
+          <div class="col-md-8">
+            
+               <h2>Meeps!</h2>
+
+                     {% for meep in meeps %}
+                         <div class="alert alert-dark" role="alert">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-2">
+                                    {% if meep.user.profile.profile_image %}
+                                <img src="{{ meep.user.profile.profile_image.url }}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">
+                           {% else %}
+                            
+                            <img src="{% static 'images/profile_image.jpg' %}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">
+                            {% endif %}
+                                    </div>
+                                    <div class="col-10">
+                                        {{meep.body}} <br/>  
+                            <small class="text-muted">
+                                {{meep.created_at}} By  @{{meep.user.username}}  
+                                - {{ meep.number_of_likes }} Likes - 
+
+                                {% if user in meep.likes.all %}
+                                <a href="{% url 'meep_like' meep.id %}"> <i class="fa fa-heart-o" style="color:red"></i></a>
+                                {% else %}  
+                                <a href="{% url 'meep_like' meep.id %}"> <i class="fa fa-heart" style="color:red"></i></a>
+                                {% endif %}
+                            </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                         </div>
+                         <br/>
+                     {% endfor %}
+          </div>
+
+
+                  <div class="col-md-4 mt-5" >
+                       <form method="POST">
+                           {% csrf_token %} 
+
+                            {{ form.as_p}}
+                            <button class="btn btn-outline-secondary" type="submit">
+                                 Meep Post!
+                            </button>
+                            
+                       </form>
+                  </div>
+     </div>
+</div>
+
+ 
+      {% endblock %}
+	
